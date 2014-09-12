@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+project.ext.PENTAHO_VERSION = 'TRUNK-SNAPSHOT'
+project.ext.DRILL_EXEC_VERSION = '1.0.0-m2-incubating-SNAPSHOT'
+
+configurations {
+	provided
+	compile.extendsFrom provided
+}
+
+repositories {
+  maven {
+    url 'http://nexus.pentaho.org/content/groups/omni/'
+  }
+  maven {
+    url 'http://repo.pentaho.org/artifactory/repo'
+  }
+  ivy {
+    url "http://repo.pentaho.org/artifactory/repo/"
+    layout  "pattern", {
+      ivy "[organisation]/[module]/[revision]/[module]-[revision].ivy.xml"
+      artifact "[organisation]/[module]/[revision]/[module]-[revision].jar"
+      m2compatible = true
+    }
+  }
+  mavenCentral()
+  mavenLocal()
+}
+
+dependencies {
+  provided "pentaho-kettle:kettle-core:${PENTAHO_VERSION}"
+  provided "pentaho-kettle:kettle-engine:${PENTAHO_VERSION}"
+  provided "pentaho:metastore:${PENTAHO_VERSION}"
+  compile  "org.apache.drill.exec:drill-java-exec:${DRILL_EXEC_VERSION}"
+}
